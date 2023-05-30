@@ -18,7 +18,6 @@ const ShoppingCart = () => {
         return products?.filter((p) => p._id === id)[0];
     };
     const currentUser = useSelector(getCurrentUserData());
-    console.log("currentUser для purchase", currentUser);
     let currentUserOrders = [...new Set(currentUser?.orders)];
     const findUniqOrders = () => {
         if (currentUser?.orders) {
@@ -57,21 +56,6 @@ const ShoppingCart = () => {
         };
     });
 
-    console.log("uniqueProducts", uniqueProducts);
-    // console.log("currentUser.orders", currentUser.orders);
-    // uniqueProducts?.forEach((prod) => {
-    //     const uniqProd = { ...prod };
-    //     console.log(uniqProd);
-    //     uniqProd.quantity = currentUserOrders.filter(
-    //         (ord) => ord._id === prod._id
-    //     ).length;
-    //     console.log(uniqProd);
-    //     prod = { ...uniqProd };
-    // console.log("quantity", orderQuantity);
-    // return { prod: uniqProd };
-    // });
-
-    console.log("uniqueProducts", uniqueProducts);
     const handleClickRemoveItem = (item) => {
         const newOrders = [];
         for (const prod of currentUser?.orders) {
@@ -111,31 +95,15 @@ const ShoppingCart = () => {
             for (const ord of uniqueProducts) {
                 if (prod._id === ord._id) {
                     quantityAfterOrder = prod.quantity - ord.quantity;
-                    console.log("quantityAfterOrder", quantityAfterOrder);
                     return { ...prod, quantity: quantityAfterOrder };
                 }
             }
             return { ...prod, quantity: quantityAfterOrder };
         });
-        console.log("productsAfterOrder", productsAfterOrder);
         productsAfterOrder.map((prod) => {
             return dispatch(updateProduct({ ...prod }));
         });
-        console.log("currentUser.purchaseHistory", currentUser);
         let currentUserPurchaseHistory = currentUser.purchaseHistory;
-        // currentUserPurchaseHistory
-        //     ? currentUserPurchaseHistory.push({
-        //           _id: nanoid(),
-        //           created_at: Date.now(),
-        //           purchase: uniqueProducts
-        //       })
-        //     : (currentUserPurchaseHistory = [
-        //           {
-        //               _id: nanoid(),
-        //               created_at: Date.now(),
-        //               purchase: uniqueProducts
-        //           }
-        //       ]);
 
         currentUserPurchaseHistory
             ? (currentUserPurchaseHistory = [
@@ -154,7 +122,6 @@ const ShoppingCart = () => {
                   }
               ]);
         currentUserOrders = [];
-        console.log("currentUserPurchaseHistory", currentUserPurchaseHistory);
         dispatch(
             updateUser({
                 ...currentUser,

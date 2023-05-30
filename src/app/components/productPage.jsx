@@ -16,7 +16,6 @@ const ProductPage = ({ productId }) => {
     const history = useHistory();
 
     const currentUser = useSelector(getCurrentUserData());
-    console.log(currentUser);
     const [order, setOrder] = useState(
         currentUser?.orders?.filter((o) => o._id === productId)
     );
@@ -27,7 +26,7 @@ const ProductPage = ({ productId }) => {
     const category = useSelector(getCategoryById(product?.category));
     const categoriesLoading = useSelector(getCategoriesLoadingStatus());
 
-    let currentUserOrders = [...new Set(currentUser.orders)];
+    let currentUserOrders = [...new Set(currentUser?.orders)];
 
     const handleClick = () => {
         history.push(`/`);
@@ -44,7 +43,6 @@ const ProductPage = ({ productId }) => {
         setOrder(currentUserOrders.filter((o) => o._id === productId));
         dispatch(updateUser({ ...currentUser, orders: currentUserOrders }));
     };
-    console.log(category);
     const handleClickBuy = () => {
         if (!order || currentUserOrders === null) {
             setOrder([product]);
@@ -60,6 +58,37 @@ const ProductPage = ({ productId }) => {
                 orders: currentUserOrders
             })
         );
+    };
+
+    const handleClickFavourite = () => {
+        let newFavourite = currentUser?.favourite;
+
+        if (
+            currentUser?.favourite?.filter((prod) => prod._id === product._id)
+                .length > 0
+        ) {
+            newFavourite = [...currentUser.favourite].filter(
+                (prod) => prod._id !== product._id
+            );
+            dispatch(
+                updateUser({
+                    ...currentUser,
+                    favourite: newFavourite
+                })
+            );
+        } else {
+            if (!currentUser.favourite) {
+                newFavourite = [product];
+            } else {
+                newFavourite = [...currentUser.favourite, product];
+            }
+            dispatch(
+                updateUser({
+                    ...currentUser,
+                    favourite: newFavourite
+                })
+            );
+        }
     };
     if (!isLoading && product && !categoriesLoading) {
         return (
@@ -80,6 +109,32 @@ const ProductPage = ({ productId }) => {
                     {category.name}
                 </span>
                 <div className="d-flex flex-wrap card m-5 bg-light flex-column contentJustify-center">
+                    <div className="position-absolute end-0 p-4">
+                        {currentUser.favourite &&
+                        currentUser?.favourite.filter(
+                            (prod) => prod._id === product._id
+                        ).length > 0 ? (
+                            <i
+                                role="button"
+                                onClick={handleClickFavourite}
+                                className="pt-4 bi bi-heart-fill"
+                                style={{
+                                    fontSize: "40px",
+                                    color: "red"
+                                }}
+                            ></i>
+                        ) : (
+                            <i
+                                role="button"
+                                onClick={handleClickFavourite}
+                                className="pt-4 bi bi-heart"
+                                style={{
+                                    fontSize: "40px",
+                                    color: "red"
+                                }}
+                            ></i>
+                        )}
+                    </div>
                     <div className="row g-0">
                         <div className="col m-4">
                             <img

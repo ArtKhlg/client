@@ -3,6 +3,7 @@ import Chevron from "./chevron";
 import PropTypes from "prop-types";
 
 import "./Accordion.css";
+import history from "../../../utils/history";
 
 function Accordion({ purch }) {
     const [setActive, setActiveState] = useState("");
@@ -24,6 +25,11 @@ function Accordion({ purch }) {
     }
     const parseDate = new Date(purch.created_at);
 
+    const handleClickProductPage = (product) => {
+        window.scrollTo(0, 0);
+        history.push(`/products/${product._id}`);
+    };
+
     return (
         <div className="accordion__section">
             <button
@@ -44,6 +50,8 @@ function Accordion({ purch }) {
                             <div
                                 key={p._id}
                                 className="row mb-4 d-flex justify-content-between align-items-center"
+                                role="button"
+                                onClick={() => handleClickProductPage(p)}
                             >
                                 <div className="col-md-2 col-lg-2 col-xl-3  ">
                                     <img
@@ -53,15 +61,7 @@ function Accordion({ purch }) {
                                     />
                                 </div>
                                 <div className="col-md-3 col-lg-3 col-xl-2">
-                                    <h6
-                                        className="text-black mb-0"
-                                        // role="button"
-                                        // onClick={() =>
-                                        //     handleClickProductPage(
-                                        //         o
-                                        //     )
-                                        // }
-                                    >
+                                    <h6 className="text-black mb-0">
                                         {p.name}
                                     </h6>
                                 </div>

@@ -40,9 +40,6 @@ const EditProductPage = () => {
             );
         }
     }, [data]);
-
-    console.log(data);
-    console.log("productCategoryName", productCategoryName);
     const validatorConfig = {
         name: {
             isRequired: {
@@ -110,7 +107,6 @@ const EditProductPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // const dataCat = categories.filter((c) => c.name === data.category);
         const isValid = validate();
         if (!isValid) return;
 
@@ -119,13 +115,6 @@ const EditProductPage = () => {
                 ...data
             })
         );
-
-        // dispatch(
-        //     updateUser({
-        //         ...data,
-        //         qualities: data.qualities.map((q) => q.value)
-        //     })
-        // );
         history.push(`/admin`);
     };
     return (
@@ -216,9 +205,5 @@ const EditProductPage = () => {
         </>
     );
 };
-
-// EditProductPage.propTypes = {
-//     product: PropTypes.object
-// };
 
 export default EditProductPage;

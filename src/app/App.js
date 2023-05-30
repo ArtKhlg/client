@@ -11,6 +11,7 @@ import AdminPage from "./layouts/adminPage";
 import Thanks from "./layouts/thanks";
 import Products from "./layouts/products";
 import AppLoader from "./components/ui/hoc/appLoader";
+import Favourite from "./layouts/favourite";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
             <AppLoader>
                 <NavBar />
                 <Switch>
+                    <ProtectedRoute path="/favourite" component={Favourite} />
                     <ProtectedRoute
                         path="/shoppingCart"
                         component={ShoppingCart}

@@ -12,7 +12,6 @@ const EditUserPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState();
     const currentUser = useSelector(getCurrentUserData());
-    console.log(currentUser);
     const [errors, setErrors] = useState({});
 
     const handleSubmit = async (e) => {
