@@ -5,12 +5,19 @@ import EditProduct from "../components/editProductButton";
 import EditProductPage from "../components/editProductPage";
 import AddProductPage from "../components/addProductPage";
 import DeleteProduct from "../components/deleteProductButton.jsx";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom";
+import {
+    Redirect,
+    useHistory,
+    useParams
+} from "react-router-dom/cjs/react-router-dom";
+import { useSelector } from "react-redux";
+import { getCurrentUserData } from "../store/users";
 
 const AdminPage = () => {
     const history = useHistory();
     const { edit } = useParams();
-
+    const currentUser = useSelector(getCurrentUserData());
+    console.log(currentUser);
     const columns = {
         name: {
             path: "name",
@@ -56,28 +63,34 @@ const AdminPage = () => {
     };
     return (
         <>
-            {edit && edit !== "add" ? (
-                <EditProductPage />
-            ) : edit && edit === "add" ? (
-                <AddProductPage />
+            {currentUser && currentUser.admin === true ? (
+                <>
+                    {edit && edit !== "add" ? (
+                        <EditProductPage />
+                    ) : edit && edit === "add" ? (
+                        <AddProductPage />
+                    ) : (
+                        <div>
+                            {" "}
+                            <div className="d-flex justify-content-around">
+                                <button
+                                    className="btn btn-success"
+                                    onClick={handleClick}
+                                >
+                                    Добавить новый товар
+                                </button>
+                            </div>
+                            <table className="table">
+                                <>
+                                    <TableHeader {...{ columns }} />
+                                    <TableBody {...{ columns }} />
+                                </>
+                            </table>
+                        </div>
+                    )}
+                </>
             ) : (
-                <div>
-                    {" "}
-                    <div className="d-flex justify-content-around">
-                        <button
-                            className="btn btn-success"
-                            onClick={handleClick}
-                        >
-                            Добавить новый товар
-                        </button>
-                    </div>
-                    <table className="table">
-                        <>
-                            <TableHeader {...{ columns }} />
-                            <TableBody {...{ columns }} />
-                        </>
-                    </table>
-                </div>
+                <Redirect to="/" />
             )}
         </>
     );
