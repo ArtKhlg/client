@@ -4,6 +4,9 @@ import Category from "./ui/category";
 import history from "../utils/history";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserData, updateUser } from "../store/users";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Rating from "./ui/rating";
 
 const ProductsList = ({ products }) => {
     const handleClick = (productId) => {
@@ -34,6 +37,7 @@ const ProductsList = ({ products }) => {
             newFavourite = [product];
 
             dispatch(updateUser({ ...currentUser, favourite: newFavourite }));
+            toast.success("Товар добавлен в избранное");
             return newFavourite;
         } else {
             if (
@@ -47,6 +51,7 @@ const ProductsList = ({ products }) => {
                 dispatch(
                     updateUser({ ...currentUser, favourite: newFavourite })
                 );
+                toast.error("Товар удален из избранного");
                 return newFavourite;
             } else {
                 newFavourite = [...newFavourite, product];
@@ -54,6 +59,8 @@ const ProductsList = ({ products }) => {
                 dispatch(
                     updateUser({ ...currentUser, favourite: newFavourite })
                 );
+
+                toast.success("Товар добавлен в избранное");
                 return newFavourite;
             }
         }
@@ -89,36 +96,43 @@ const ProductsList = ({ products }) => {
                                 src={product.image}
                                 height="200"
                                 alt={product.name}
+                                type="button"
+                                onClick={() => handleClick(product._id)}
                             />
-                            <div className=" bottom-0">
-                                {newFavourite &&
-                                newFavourite?.filter(
-                                    (prod) => prod._id === product._id
-                                ).length > 0 ? (
-                                    <i
-                                        role="button"
-                                        onClick={() =>
-                                            handleClickFavourite(product)
-                                        }
-                                        className="pt-4 bi bi-heart-fill"
-                                        style={{
-                                            fontSize: "25px",
-                                            color: "red"
-                                        }}
-                                    ></i>
-                                ) : (
-                                    <i
-                                        role="button"
-                                        onClick={() =>
-                                            handleClickFavourite(product)
-                                        }
-                                        className="pt-4 bi bi-heart"
-                                        style={{
-                                            fontSize: "25px",
-                                            color: "red"
-                                        }}
-                                    ></i>
-                                )}
+                            <div className="row mt-2">
+                                <div className="col">
+                                    {newFavourite &&
+                                    newFavourite?.filter(
+                                        (prod) => prod._id === product._id
+                                    ).length > 0 ? (
+                                        <i
+                                            role="button"
+                                            onClick={() =>
+                                                handleClickFavourite(product)
+                                            }
+                                            className="bi bi-heart-fill"
+                                            style={{
+                                                fontSize: "25px",
+                                                color: "red"
+                                            }}
+                                        ></i>
+                                    ) : (
+                                        <i
+                                            role="button"
+                                            onClick={() =>
+                                                handleClickFavourite(product)
+                                            }
+                                            className="bi bi-heart"
+                                            style={{
+                                                fontSize: "25px",
+                                                color: "red"
+                                            }}
+                                        ></i>
+                                    )}
+                                </div>
+                                <div className="col-xl-7 mt-2">
+                                    <Rating productRating={product.rate} />
+                                </div>
                             </div>
                         </div>
                         <div
@@ -151,6 +165,7 @@ const ProductsList = ({ products }) => {
                     </div>
                 ))}
             </div>
+            <ToastContainer />
         </div>
     );
 };

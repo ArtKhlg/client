@@ -131,7 +131,6 @@ export const signUp =
         dispatch(authRequested());
         try {
             const data = await authService.register({ email, password });
-            localStorageService.setTokens(data);
             dispatch(authRequestSuccess({ userId: data.localId }));
             dispatch(
                 createUser({
@@ -149,6 +148,7 @@ export const signUp =
                     ...rest
                 })
             );
+            localStorageService.setTokens(data);
         } catch (error) {
             dispatch(authRequestFailed(error.message));
         }

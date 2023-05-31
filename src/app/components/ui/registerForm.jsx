@@ -79,6 +79,7 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
+
         dispatch(signUp(data));
     };
     return (

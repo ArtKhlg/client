@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserData, updateUser } from "../store/users";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Favourite = () => {
     const currentUser = useSelector(getCurrentUserData());
     const dispatch = useDispatch();
@@ -16,6 +19,7 @@ const Favourite = () => {
             (f) => f._id !== productId
         );
         dispatch(updateUser({ ...currentUser, favourite: newFavourite }));
+        toast.error("Товар удален из избранного");
     };
     return (
         <>
@@ -80,6 +84,7 @@ const Favourite = () => {
                     </div>
                 )}
             </div>
+            <ToastContainer />
         </>
     );
 };

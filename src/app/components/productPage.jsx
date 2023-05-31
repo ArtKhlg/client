@@ -10,6 +10,8 @@ import {
 } from "../store/categories";
 import { getProductById, getProductsLoadingStatus } from "../store/products";
 import { getCurrentUserData, updateUser } from "../store/users";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductPage = ({ productId }) => {
     const dispatch = useDispatch();
@@ -76,11 +78,14 @@ const ProductPage = ({ productId }) => {
                     favourite: newFavourite
                 })
             );
+            toast.error("Товар удален из избранного");
         } else {
             if (!currentUser.favourite) {
                 newFavourite = [product];
+                toast.success("Товар добавлен в избранное");
             } else {
                 newFavourite = [...currentUser.favourite, product];
+                toast.success("Товар добавлен в избранное");
             }
             dispatch(
                 updateUser({
@@ -110,7 +115,7 @@ const ProductPage = ({ productId }) => {
                 </span>
                 <div className="d-flex flex-wrap card m-5 bg-light flex-column contentJustify-center">
                     <div className="position-absolute end-0 p-4">
-                        {currentUser.favourite &&
+                        {currentUser?.favourite &&
                         currentUser?.favourite.filter(
                             (prod) => prod._id === product._id
                         ).length > 0 ? (
@@ -240,6 +245,7 @@ const ProductPage = ({ productId }) => {
                     <h2>Вернуться в каталог</h2>
                 </button>
                 <RecommendProducts categoryId={product.category} />
+                <ToastContainer />
             </>
         );
     } else return "loading...";
